@@ -3,7 +3,7 @@
 
 struct AsciiSymbols {
   // clang-format off
-  const std::vector<std::string> x = { //BYT NAMN
+  const std::vector<std::string> x = {
     "   \\/",
     "   /\\"
   };
