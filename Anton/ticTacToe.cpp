@@ -32,12 +32,11 @@ int main() {
       ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
   };
   int activePlayer = 1;
-  bool gameRunning = true;
 
   std::cout << "Welcome to Tic-Tac-Toe!\n";
   displayBoard(board);
 
-  while (gameRunning) {
+  while (true) {
     playerMove(board, activePlayer);
     if (checkWin(board, activePlayer)) {
       switch (activePlayer) {
@@ -45,8 +44,8 @@ int main() {
           std::cout << std::endl << std::endl;
           std::cout << "Player 1 (X) wins the game GG!" << std::endl;
           std::cout << std::endl << std::endl;
-          std::cout << "Winning board: " << std::endl;
-          gameRunning = false;
+          std::cout << "Winning board: " << std::endl;        
+          displayBoard(board);  
           break;
         case 2:
           std::cout << std::endl << std::endl;
@@ -54,15 +53,16 @@ int main() {
           std::cout << "Player 2 (O) wins the game GG!" << std::endl;
           std::cout << std::endl << std::endl;
           std::cout << "Winning board: " << std::endl;
-
-          gameRunning = false;
+          displayBoard(board);
+          break;
         default:
           break;
       }
+      break;
     }
     if (checkDraw(board)) {
       std::cout << "It is a tie!" << std::endl;
-      gameRunning = false;
+      break;
     }
 
     nextPlayer(&activePlayer);

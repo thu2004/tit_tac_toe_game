@@ -169,12 +169,10 @@ class Game {
  public:
   // Public  Functions
   void play() {
-    bool gameRunning = true;
-
     std::cout << "Welcome to Tic-Tac-Toe!\n";
     gameBoard.displayBoard();
 
-    while (gameRunning) {
+    while (true) {
       playerMove();
       if (checkWin()) {
         switch (activePlayer) {
@@ -183,7 +181,7 @@ class Game {
             std::cout << "Player 1 (X) wins the game GG!" << std::endl;
             std::cout << std::endl << std::endl;
             std::cout << "Winning board: " << std::endl;
-            gameRunning = false;
+            gameBoard.displayBoard();
             break;
           case 2:
             std::cout << std::endl << std::endl;
@@ -191,19 +189,22 @@ class Game {
             std::cout << "Player 2 (O) wins the game GG!" << std::endl;
             std::cout << std::endl << std::endl;
             std::cout << "Winning board: " << std::endl;
-
-            gameRunning = false;
+            gameBoard.displayBoard();
           default:
             break;
         }
+        break;
       }
       if (checkDraw()) {
         std::cout << "It is a tie!" << std::endl;
-        gameRunning = false;
+        break;
       }
       nextPlayer();
       gameBoard.displayBoard();
     }
+    std::cout << "\nPress Enter to exit...";
+    std::cin.ignore(1000, '\n');
+    std::cin.get();
   }
 };
 

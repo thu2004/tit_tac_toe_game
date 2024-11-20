@@ -237,7 +237,6 @@ class Game {
  public:
   // Public  Functions
   void play() {
-    bool gameRunning = true;
     system("clear");
     std::cout << "Welcome to Anton's TiCety TaCety ToeSy!\n\n"
                  "How to play:\nMove your cursor (X for player 1 and O for "
@@ -252,25 +251,25 @@ class Game {
               << std::endl;
     std::cin.get();
 
-    while (gameRunning) {
+    while (true) {
       playerMove();
       if (quitGame) {
         std::cout << std::endl << std::endl;
         std::cout << "Player " << activePlayer << " has stopped the game."
                   << std::endl;
         std::cout << std::endl << std::endl;
-        gameRunning = false;
+        break;
       }
       if (checkWin()) {
         std::cout << std::endl << std::endl;
         std::cout << "Player " << activePlayer << " wins the game GG!"
                   << std::endl;
         std::cout << std::endl << std::endl;
-        gameRunning = false;
+        break;
       }
       if (checkDraw()) {
         std::cout << "It is a tie!" << std::endl;
-        gameRunning = false;
+        break;
       }
       nextPlayer();
     }
