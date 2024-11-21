@@ -99,6 +99,11 @@ public:
         }
 
         return 0; // Game over
+    }    
+
+    void clearConsole()
+    {
+        std::cout << "\033[2J\033[1;1H";
     }
 };
 
@@ -127,7 +132,7 @@ public:
         bool gameRunning = true;
         while (gameRunning)
         {
-            clearConsole();
+            board.clearConsole();
             std::cout << "Welcome to Tic-Tac-Toe, current score is " << score[0] << " " << score[1] << std::endl;
             board.drawBoard();
             int x, y;
@@ -151,7 +156,7 @@ public:
             switch (board.checkState()) {
                 case 2:                    
                     (playerTurn == -1 ? score[0]++ : score[1]++);
-                    clearConsole();
+                    board.clearConsole();
                     std::cout << "Welcome to Tic-Tac-Toe, current score is " << score[0] << " " << score[1] << std::endl;
                     board.drawBoard();
                     std::cout << "Player " << (playerTurn == -1 ? "X" : "O") << " has won!" << std::endl;
@@ -161,7 +166,7 @@ public:
                     playerTurn = -playerTurn;
                     break;
                 case 0:
-                    clearConsole();
+                    board.clearConsole();
                     std::cout << "Welcome to Tic-Tac-Toe, current score is " << score[0] << " " << score[1] << std::endl;
                     board.drawBoard();
                     std::cout << "It's a draw" << std::endl;
@@ -169,11 +174,6 @@ public:
                     break;
             }
         }
-    }
-
-    void clearConsole()
-    {
-        std::cout << "\033[2J\033[1;1H";
     }
 };
 
