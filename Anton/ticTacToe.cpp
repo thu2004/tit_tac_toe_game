@@ -2,11 +2,11 @@
 #include <vector>
 
 // Function declarations
-void displayBoard(char* board);
-bool checkWin(char* board, const int& activePlayer);
+void displayBoard(const char* board);
+bool checkWin(const char* board, int activePlayer);
 bool checkDraw(const char* board);
-void playerMove(char* board, const int& activePlayer);
-void nextPlayer(int* activePlayer);
+void playerMove(char* board, int activePlayer);
+int nextPlayer(int activePlayer);
 
 // Global ascii symbols
 
@@ -64,8 +64,7 @@ int main() {
       std::cout << "It is a tie!" << std::endl;
       break;
     }
-
-    nextPlayer(&activePlayer);
+    activePlayer = nextPlayer(activePlayer);
     displayBoard(board);
   }
   std::cout << "\nPress Enter to exit...";
@@ -77,7 +76,7 @@ std::cin.get();
 
 // Function to display the game board
 
-void displayBoard(char* board) {
+void displayBoard(const char* board) {
     std::string padding = "              ";
   std::cout << padding << "____________________________\n";
   for (int row = 0; row < 3; row++) {
@@ -111,7 +110,7 @@ void displayBoard(char* board) {
 }
 
 // Function to check if a player has won
-bool checkWin(char* board, const int& activePlayer) {
+bool checkWin(const char* board, int activePlayer) {
   char player = (activePlayer == 1) ? 'X' : 'O';
 
   // Horizontal win
@@ -145,9 +144,8 @@ bool checkDraw(const char* board) {
 }
 
 // Function to let player make move
-void playerMove(char* board, const int& activePlayer) {
+void playerMove(char* board, int activePlayer) {
   int choice = -1;
-  bool moveMade = false;
 
   std::cout << std::endl;
   if (activePlayer == 1)
@@ -175,9 +173,9 @@ void playerMove(char* board, const int& activePlayer) {
       std::cout << "That square is already taken, choose another one!"
                 << std::endl;
     } else {
-      moveMade = true;
+      break;
     }
-  } while (!moveMade);
+  } while (true);
   switch (activePlayer) {
     case 1:
       board[choice] = 'X';
@@ -191,6 +189,6 @@ void playerMove(char* board, const int& activePlayer) {
 }
 
 // Function to switch player
-void nextPlayer(int* activePlayer) {
-  *activePlayer = (*activePlayer == 1) ? 2 : 1;
+int nextPlayer(int activePlayer) {
+return (activePlayer == 1) ? 2 : 1;
 }
