@@ -44,8 +44,8 @@ int main() {
           std::cout << std::endl << std::endl;
           std::cout << "Player 1 (X) wins the game GG!" << std::endl;
           std::cout << std::endl << std::endl;
-          std::cout << "Winning board: " << std::endl;        
-          displayBoard(board);  
+          std::cout << "Winning board: " << std::endl;
+          displayBoard(board);
           break;
         case 2:
           std::cout << std::endl << std::endl;
@@ -68,8 +68,8 @@ int main() {
     displayBoard(board);
   }
   std::cout << "\nPress Enter to exit...";
-std::cin.ignore(1000, '\n');
-std::cin.get();
+  std::cin.ignore(1000, '\n');
+  std::cin.get();
 
   return 0;
 }
@@ -77,7 +77,7 @@ std::cin.get();
 // Function to display the game board
 
 void displayBoard(const char* board) {
-    std::string padding = "              ";
+  std::string padding = "              ";
   std::cout << padding << "____________________________\n";
   for (int row = 0; row < 3; row++) {
     std::cout << padding << "|";
@@ -189,6 +189,4 @@ void playerMove(char* board, int activePlayer) {
 }
 
 // Function to switch player
-int nextPlayer(int activePlayer) {
-return (activePlayer == 1) ? 2 : 1;
-}
+int nextPlayer(int activePlayer) { return (activePlayer == 1) ? 2 : 1; }
