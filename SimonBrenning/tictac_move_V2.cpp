@@ -9,59 +9,66 @@
 // };
 
 
-char game_board[3][9] = {                           // index (0,2), (4,6), (8,10) == [] // index 1 4 7 == spot for player marker
-{' ',' ',' ',' ',' ',' ',' ',' ',' '}, 
-{' ',' ',' ',' ',' ',' ',' ',' ',' '},
-{' ',' ',' ',' ',' ',' ',' ',' ',' '}
+char game_board[3][3] = {                    
+{' ',' ',' '}, 
+{' ',' ',' '},
+{' ',' ',' '}
 };
 
+int posHorizontal = 1;  //startpos i gameboard = ruta 5/mitten
+int posVertical = 1;
 
 void clearScreen() {
     std::printf("\033[H\033[J"); 
 }
 
 
+void print_game_board(char board[3][3], bool player) {
 
-void print_game_board(char board[3][9])
-{
-    for(int i = 0; i < 3; i++)
-    {
-        for(int j = 0; j < 9; j++)
-        {
-            std::cout << board[i][j];
-            if(j == 2 || j == 5)
-            {
-                std::cout << '|';
+    char cPlayer = player ? 'X' : 'O';
+    
+    std::cout << "current player: " << cPlayer << "\n";
+    std::cout << "|---|---|---|\n";
+    for (int i = 0; i < 3; i++){    //horizontal
+        std::cout << '|';
+
+        for (int j = 0; j < 3; j++){    //vertical
+            if (i == posVertical && j == posHorizontal){
+                std::cout << '[' << board[i][j] << ']' << '|';
             }
+            else{
+                std::cout << ' ' << board[i][j] << ' ' << '|';
+            }
+
         }
-        std::cout << std::endl;
-        if (i < 2)
-            std::cout << "---|---|---\n";
+
+        std::cout << "\n|---|---|---|\n";
     }
+
+
 }
 
 
-
-bool checkWin(char board[3][9], bool player){
+bool checkWin(char board[3][3], bool player){
     char currentPlayer = player ? 'X' : 'O';
 
             //horizontal win checks 
-    if ((board[0][1] == currentPlayer && board[0][4] == currentPlayer && board[0][7] == currentPlayer) ||
-        (board[1][1] == currentPlayer && board[1][4] == currentPlayer && board[1][7] == currentPlayer) ||
-        (board[2][1] == currentPlayer && board[2][4] == currentPlayer && board[2][7] == currentPlayer)){
+    if ((board[0][0] == currentPlayer && board[0][1] == currentPlayer && board[0][2] == currentPlayer) ||
+        (board[1][0] == currentPlayer && board[1][1] == currentPlayer && board[1][2] == currentPlayer) ||
+        (board[2][0] == currentPlayer && board[2][1] == currentPlayer && board[2][2] == currentPlayer)){
             return true;
         }
 
         //vertical win checks
-     if ((board[0][1] == currentPlayer && board[1][1] == currentPlayer && board[2][1] == currentPlayer) ||
-        (board[0][4] == currentPlayer && board[1][4] == currentPlayer && board[2][4] == currentPlayer) ||
-        (board[0][7] == currentPlayer && board[1][7] == currentPlayer && board[2][7] == currentPlayer)){
+     if ((board[0][0] == currentPlayer && board[1][0] == currentPlayer && board[2][0] == currentPlayer) ||
+        (board[0][1] == currentPlayer && board[1][1] == currentPlayer && board[2][1] == currentPlayer) ||
+        (board[0][2] == currentPlayer && board[1][2] == currentPlayer && board[2][2] == currentPlayer)){
             return true;
         }
 
         //diagonal win checks
-     if ((board[0][1] == currentPlayer && board[1][4] == currentPlayer && board[2][7] == currentPlayer) ||
-        (board[0][7] == currentPlayer && board[1][4] == currentPlayer && board[2][1] == currentPlayer)){
+     if ((board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) ||
+        (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)){
             return true;
         }
     else
@@ -71,7 +78,7 @@ bool checkWin(char board[3][9], bool player){
 
 
 
-bool place_on_board(char board[3][9], int vertical_pos, int horizontal_pos, bool player)
+bool place_on_board(char board[3][3], int vertical_pos, int horizontal_pos, bool player)
 {
     //!player == player2, player = player1
     //true =  X
@@ -90,40 +97,30 @@ bool place_on_board(char board[3][9], int vertical_pos, int horizontal_pos, bool
     if (checkWin(board, player))
     {
         clearScreen();
-        print_game_board(game_board);
-        std::cout << "IASDUASDASODASJAS";
+        print_game_board(game_board, player);
         std::cout << (player ? "Player X wins!\n" : "Player O wins!\n");
         system("pause");
+        exit(0);
     }
 
     return true;
 }
 
 
-void moveCursor(char board[3][9], bool player){      //move cursor. returns true if move successful
 
-    int posHorizontal = 4;  //startpos = ruta 5
-    int posVertical = 1;
-    
+
+
+void moveCursor(char board[3][3], bool player){      //move cursor. returns true if move successful
+
     char key; 
-
-    
-    
 
     while(true)
     {
 
-        
-        board[posVertical][posHorizontal-1] = '[';
-        board[posVertical][posHorizontal+1] = ']';  
         clearScreen();
-        print_game_board(game_board);
-
+        print_game_board(game_board, player);
 
         key = _getch();
-
-        board[posVertical][posHorizontal-1] = ' '; //reset current pos before next loop
-        board[posVertical][posHorizontal+1] = ' ';  
 
         if (key == -32 || key == 224) { // Kontrollera escape-sekvens
             key = _getch(); // Läs andra tecknet
@@ -145,17 +142,17 @@ void moveCursor(char board[3][9], bool player){      //move cursor. returns true
             break;
 
         case 75: //left
-            if(posHorizontal == 1)
-                posHorizontal = 7;
+            if(posHorizontal == 0)
+                posHorizontal = 2;
             else
-                posHorizontal-= 3;
+                posHorizontal-= 1;
             break;
 
         case 77: //right
-            if(posHorizontal == 7)
-                posHorizontal = 1;
+            if(posHorizontal == 2)
+                posHorizontal = 0;
             else
-                posHorizontal += 3;
+                posHorizontal += 1;
             break;
 
         default:
@@ -195,8 +192,6 @@ void moveCursor(char board[3][9], bool player){      //move cursor. returns true
 
 int main(int argc, char const *argv[])
 {
-    //print_game_board(game_board);
-    //print_game_board(game_board);
     
     bool player = true;
     
