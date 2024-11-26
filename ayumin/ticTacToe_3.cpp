@@ -1,13 +1,4 @@
-/*
 
-Hej Chi Thu! 
-Thaks for playing my game. I have a question.
-den sista val precis innan man vinner förändras inte till 
-'X' eller 'O' utan default nummeret i arreyen visas kvar. 
-Frågan är att hur man gör för att den sista valet förändras 
-till 'X' eller 'O'. Hör gärna av dig. Mvh.Ayumi"
-
-*/
 
 #include <iostream>
 #include <termios.h>
