@@ -1,118 +1,124 @@
-## 1. Create a Tic-Tac-Toe game run in a console
-
-Here is the pseudocode for the Tic-Tac-Toe game:
-
-1. **Initialize Game State**:
-    
-    * Create a 3x3 board filled with empty spaces.
-    * Define two players, 'X' and 'O'.
-    * Set the initial player turn to 0.
-    * Set the initial cursor position to the top-left corner of the board (0, 0).
-2. **Game Loop**:
-    
-    * Repeat the following steps until the game ends:
-        1. **Print Board**:
-            * Clear the console.
-            * Loop through each cell of the board and print its value.
-            * Highlight the current cursor position.
-        2. **Handle Player Input**:
-            * Display whose turn it is.
-            * Wait for player input:
-                * If user enter number 1-9 
-                    * If the selected cell is empty, break out of the input loop.
-                    * If the selected cell is not empty, prompt the player to choose another cell.
-                    
-        3. **Place Player Mark**:
-            * Set the current player's mark ('X' or 'O') in the selected cell.
-        4. **Check for Win or Draw**:
-            * If the current player has won, display a winning message and end the game.
-            * If the board is full and no player has won, display a draw message and end the game.
-        5. **Switch Turn**:
-            * Switch to the other player.
-3. **End of Game**:
-    
-    * The game loop ends when either a player wins or the game ends in a draw.
-
-
-```cpp
 #include <iostream>
+#include <vector>
 using namespace std;
 
-// Function declarations
-void displayBoard(...);
-bool checkWin(...);
-bool checkDraw(...);
 
-int main() {
-    // data
-    bool gameRunning = true;
+class Board {
+private:
+    vector<char> cells;
 
-    cout << "Welcome to Tic-Tac-Toe!\n";
+public:
+    // Constructor to initialize the board
+    Board() : cells(9, ' ') {}
 
-    while (gameRunning) {
-        displayBoard(board);
-        ...
+    // Method to display the board
+    void display() const {
+        cout << "\n";
+        for (int i = 0; i < 9; i++) {
+            cout << " " << (cells[i] == ' ' ? char('1' + i) : cells[i]) << " ";
+            if (i % 3 != 2) cout << "|";
+            else if (i != 8) cout << "\n---|---|---\n";
+        }
+        cout << "\n\n";
     }
 
+    // Method to check if a cell is empty
+    bool isEmpty(int index) const {
+        return cells[index] == ' ';
+    }
+
+    // Method to set a cell's value
+    void setCell(int index, char value) {
+        cells[index] = value;
+    }
+
+    // Method to check if the current player has won
+    bool checkWin(char player) const {
+        const int winConditions[8][3] = {
+            {0, 1, 2}, {3, 4, 5}, {6, 7, 8}, // Rows
+            {0, 3, 6}, {1, 4, 7}, {2, 5, 8}, // Columns
+            {0, 4, 8}, {2, 4, 6}             // Diagonals
+        };
+        for (const auto& condition : winConditions) {
+            if (cells[condition[0]] == player &&
+                cells[condition[1]] == player &&
+                cells[condition[2]] == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Method to check if the board is full (draw)
+    bool isFull() const {
+        for (const char& cell : cells) {
+            if (cell == ' ') return false;
+        }
+        return true;
+    }
+};
+
+// Game class: Manages the game flow and players
+class Game {
+private:
+    Board board;
+    char currentPlayer;
+
+    // Switch to the other player
+    void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    // Handle the player's turn
+    void playerTurn() {
+        int move;
+        while (true) {
+            cout << "Player " << currentPlayer << ", enter your move (1-9): ";
+            cin >> move;
+
+            // Validate input and check if cell is empty
+            if (move >= 1 && move <= 9 && board.isEmpty(move - 1)) {
+                board.setCell(move - 1, currentPlayer);
+                break;
+            } else {
+                cout << "Invalid move! Please choose an empty cell (1-9).\n";
+            }
+        }
+    }
+
+    // Check if the game is over
+    bool isGameOver() const {
+        if (board.checkWin(currentPlayer)) {
+            board.display();
+            cout << "Player " << currentPlayer << " wins!\n";
+            return true;
+        } else if (board.isFull()) {
+            board.display();
+            cout << "It's a draw!\n";
+            return true;
+        }
+        return false;
+    }
+
+public:
+    // Constructor to initialize the game
+    Game() : currentPlayer('X') {}
+
+    // Method to start the game loop
+    void start() {
+        cout << "Welcome to Tic-Tac-Toe!\n";
+        while (true) {
+            board.display();
+            playerTurn();
+            if (isGameOver()) break;
+            switchPlayer();
+        }
+    }
+};
+
+// Main function
+int main() {
+    Game game;
+    game.start();
     return 0;
 }
-
-// Function to display the game board
-void displayBoard(...) {
-    
-}
-
-// Function to check if a player has won
-bool checkWin(...) {
-    
-}
-
-// Function to check if the game is a draw
-bool checkDraw(...) {
-}
-```
-
-### Example Output:
-
-```diff
-Welcome to Tic-Tac-Toe!
-
- 1 | 2 | 3 
----|---|---
- 4 | 5 | 6 
----|---|---
- 7 | 8 | 9 
-
-Player X, enter your move (1-9): 5
-
- 1 | 2 | 3 
----|---|---
- 4 | X | 6 
----|---|---
- 7 | 8 | 9 
-
-Player O, enter your move (1-9): 1
-...
-```
-
-## 2. Refactory the game using Object Oriented Programming.
-
-Create Game and Board class and define the attributes and methods. Rewrite the main function.
-
-## 3. Extent the game to handle player input with arrow keys. 
-
-Run the game for linux. using WSL (Windows machine)
-
-1. **Handle Player Input**:
-    * Wait for player input:
-        * If **Arrow Up** is pressed, move the cursor up (if possible).
-        * If **Arrow Down** is pressed, move the cursor down (if possible).
-        * If **Arrow Right** is pressed, move the cursor right (if possible).
-        * If **Arrow Left** is pressed, move the cursor left (if possible).
-        * If **Enter** is pressed:
-            * If the selected cell is empty, break out of the input loop.
-            * If the selected cell is not empty, prompt the player to choose another cell.
-
-Here is example how to get the Arrow work in Linux / WSL
-
-https://github.com/thu2004/cpp_kurs_1/blob/main/arrow_test.cpp
