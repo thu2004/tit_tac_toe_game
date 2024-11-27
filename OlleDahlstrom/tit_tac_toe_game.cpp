@@ -54,11 +54,14 @@ int main()
 void displayBoard(char board[3][3])
 {
     system("clear");
+    std::cout << "+---+---+---+" << std::endl;
     for (int row = 0; row < 3; row++) {
+        std::cout << "| ";
         for (int col = 0; col < 3; col++) {
-            std::cout << board[row][col];
+            std::cout << board[row][col] << " | ";
         }
         std::cout << std::endl;
+        std::cout << "+---+---+---+" << std::endl;
     }
 }
 
